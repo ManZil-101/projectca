@@ -1,0 +1,128 @@
+{% extends 'base/base.html' %}
+{% block title %} {{user}} {% endblock %}
+
+{% block user %}
+					<div class="widget-header icontext">
+						<a href="#" class="icon icon-sm rounded-circle border"><i class="fa fa-user"></i></a>
+						<div class="text">
+							<span class="text-muted">Welcome, {{user.first_name}}</span>
+							<div> 
+								<!-- <a href="{% url 'login' %}">Sign in</a> |  
+								<a href="{% url 'register' %}"> Register</a> -->
+							</div>
+						</div>
+					</div>
+					{% endblock %}
+
+
+
+                    {% block content %}
+                    <div class="row">
+                        <div id="map">
+
+                        </div>
+                        <div>
+                            <section id="information">
+                                <h1>hello world</h1>
+
+                               
+                            </section>
+                        </div>
+                    </div>
+                    
+                    {{alert_location|json_script:"alert"}}
+                    <style>
+                        #map{
+                            margin-left: 50px;
+                            height:480px;
+                            width: 70%;
+                        }
+                        
+                        #infomation {
+                            margin-left: 30px;
+                            padding: 30px;
+                        }
+
+                    </style>
+
+                    <script>
+                            function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Check if the cookie name matches the desired one
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+
+
+
+
+
+
+
+
+
+let userlat;
+let userlog;
+
+    navigator.geolocation.getCurrentPosition(position => {
+    userlat = position.coords.latitude;
+    userlog = position.coords.longitude;
+
+    var map = L.map('map').setView([userlat, userlog], 13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
+
+        L.marker([userlat, userlog]).addTo(map)
+            .bindPopup('A pretty CSS popup.<br> Easily customizable.')
+            .openPopup();
+ 
+    // Rest of the code...
+
+
+    // Example POST method implementation:
+    async function postData(url = "store-location/", data = { 'latitude': userlat, 'longitude': userlog }) {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken,
+            },
+            body: JSON.stringify(data),
+            
+        });
+       
+        return response.json();
+    }
+
+    postData("store-location/", { latitude: userlat, longitude: userlog })
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+});
+
+
+     
+                    </script>
+
+
+
+                    {% endblock %}
