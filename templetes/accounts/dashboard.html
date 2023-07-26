@@ -88,7 +88,7 @@
                             <p> Status: <strong>{{ incident.alert_status }}</strong><a href=""> Delete</a> </p>
                         </div>
 
-                        {% else %}
+                        {% elif bloodinfo %}
                          <p>No active alerts at the moment! </p>
                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                             Cleate Alert
@@ -111,6 +111,7 @@
           <form action="{% url 'create_alert' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form1 }}
+            
             <button type="submit" class="btn btn-primary">Create</button>
             </form>
         </div>
@@ -119,7 +120,9 @@
     </div>
   </div>
 
+{% else %}
 
+<p> Please update blood info to create alert</p>
                          {% endif %}
                         
                     </div>

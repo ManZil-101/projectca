@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from accounts.models import UserLocation
+from accounts.models import UserLocation, Profile
 # Create your models here.
 
 class IncidentInfo(models.Model):

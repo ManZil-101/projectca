@@ -1,0 +1,25 @@
+{% extends 'home/index.html' %}
+{% load static %}
+{% block alert %}
+
+<div>
+    {{incident.incident_type}} <br>
+    {{incident.description}}
+    <br>
+    {{incident.created_at}}
+    <br>
+    {{incident.user.username}}
+    <br>
+    <img id="img1" src="{{incident.photo.url}}" alt="" srcset="">
+    <br>
+    <a href="{% url 'homepage' %}"> Show other Alert</a>
+</div>
+
+
+<style>
+    #img1 {
+        height: 300px;
+        width: 300px;
+    }
+</style>
+{% endblock %}

@@ -17,14 +17,54 @@
 
 
                     {% block content %}
+                   
                     <div class="row">
                         <div id="map">
 
                         </div>
+                      
                         <div>
                             <section id="information">
-                                <h1>hello world</h1>
-
+                                {% block alert %}
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    Cleate Alert
+                                  </button>
+        
+                                 <!-- Button trigger modal -->
+        
+          
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Create Alert</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="{% url 'create_alert' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form1 }}
+              
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        
+          {% endblock %}
+                                <div id="hospital_info">
+                                    <!-- hospital information will be displayed here-->
+                                    <h1>Hospital information</h1>
+                                    <p><strong>{{ nearest_hospital.Name}}</strong></p>
+                                    <p><strong>{{ nearest_hospital.Latitude}}</strong></p>
+                                    <p><strong>{{ nearest_hospital.Longitude}}</strong></p>
+                                    <p><strong>{{ nearest_hospital.Distance}}</strong></p>
+                                </div>
                                
                             </section>
                         </div>
@@ -86,10 +126,16 @@ let userlog;
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-
-        L.marker([userlat, userlog]).addTo(map)
-            .bindPopup('A pretty CSS popup.<br> Easily customizable.')
+const alert = JSON.parse(document.getElementById('alert').textContent)
+console.log(alert)
+alert.forEach(element => {
+    console.log(element.incident_id)
+    const url = `/show_alert/${element.incident_id}/`
+    L.marker([element.latitude, element.longitude]).addTo(map)
+    .bindPopup(`<a href="${url}"> View Alert </a>`)
             .openPopup();
+});
+       
  
     // Rest of the code...
 
