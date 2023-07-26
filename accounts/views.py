@@ -170,6 +170,7 @@ def dashboard(request):
         bloodinfo = None
     
     if bloodinfo and incident:
+        print("everything sent")
         context = {
             'user': user,
             'profile': profile,
@@ -178,6 +179,7 @@ def dashboard(request):
         }
         return render(request, 'accounts/dashboard.html', context)
     elif not bloodinfo:
+        print("form not sent")
         if request.method == 'POST':
             form = BloodinfoForm(request.POST)
             if form.is_valid():
@@ -197,6 +199,7 @@ def dashboard(request):
         return render(request, 'accounts/dashboard.html', context)
     else:
         alertform = IncidentForm()
+        print("form sent")
         context = {
             'user': user,
             'profile': profile,
@@ -236,6 +239,7 @@ def editblood(request, id):
 def create_alert(request):
     
     location = UserLocation.objects.get(user = request.user)
+    form = IncidentForm()
     print(location.latitude)
     
     if request.method == 'POST':
@@ -252,8 +256,8 @@ def create_alert(request):
                 longitude = location.longitude
 
             )
-            return redirect('dashboard')
-            
+            return redirect('homepage')
+         
             
 
    
